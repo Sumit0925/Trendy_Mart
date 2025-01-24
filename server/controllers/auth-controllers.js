@@ -2,16 +2,25 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user-model");
 
-//regisetr Logic
+//* Register User Logic
 
 const register = async (req, res) => {
   const { userName, email, password } = req.body;
 
   try {
     const userExist = await User.findOne({ email });
+    const userNameExist = await User.findOne({ userName });
 
     if (userExist) {
-      return res.json({ success: false, message: "User Already Exist !" });
+      return res.json({
+        success: false,
+        message: "User Already Exist !",
+        description: "Try again with another Email",
+      });
+    }
+
+    if (userNameExist) {
+      return res.json({ success: false, message: "Try Another User Name !" });
     }
 
     const saltRound = await bcrypt.genSalt(12);
@@ -38,7 +47,7 @@ const register = async (req, res) => {
   }
 };
 
-// Login Logic
+//* Login User Logic
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -63,6 +72,7 @@ const login = async (req, res) => {
         id: userExist._id,
         role: userExist.role,
         email: userExist.email,
+        userName: userExist.userName,
       },
       process.env.JWT_SECRET_KEY,
       {
@@ -72,11 +82,12 @@ const login = async (req, res) => {
 
     res.cookie("token", token, { httpOnly: true, secure: false }).json({
       success: true,
-      message: "Logged In Successfully",
+      message: "Logged In Successfully !",
       user: {
         email: userExist.email,
         role: userExist.role,
         id: userExist._id,
+        userName: userExist.userName,
       },
     });
   } catch (error) {
@@ -88,4 +99,13 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register,login };
+//* Logout User Logic
+
+const logout = async (req, res) => {
+  res.clearCookie("token").json({
+    success: true,
+    message: "Logged Out Successfully !",
+  });
+};
+
+module.exports = { register, login, logout };

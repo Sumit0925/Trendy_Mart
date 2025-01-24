@@ -32,7 +32,7 @@ const Register = () => {
       } else {
         toast({
           title: data?.payload?.message,
-          description: "Try again with another Email",
+          description: data?.payload?.description,
           variant: "destructive",
         });
       }
