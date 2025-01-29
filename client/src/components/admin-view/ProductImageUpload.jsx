@@ -5,6 +5,7 @@ import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { useAppContext } from "@/context/auth-context";
 
 const ProductImageUpload = ({
   imageFile,
@@ -13,11 +14,13 @@ const ProductImageUpload = ({
   uploadedImageUrl,
   setUploadedImageUrl,
   setImageLoadingState,
-  // isEditMode,
+  isEditMode,
   isCustomStyling = false,
 }) => {
   const inputRef = useRef(null);
-  const API = import.meta.env.VITE_APP_URI_API;
+
+  const { API } = useAppContext();
+  // const API = import.meta.env.VITE_APP_URI_API;
 
   function handleImageFileChange(event) {
     console.log(event.target.files, "event.target.files");
@@ -55,10 +58,11 @@ const ProductImageUpload = ({
     console.log("Uplaod Image to CLoudinary Response", response);
     if (response?.data?.success) {
       setUploadedImageUrl(response.data.result.url);
-      console.log("upload Image Url", uploadedImageUrl);
       setImageLoadingState(false);
     }
   };
+
+  // console.log("upload Image Url", uploadedImageUrl);
 
   useEffect(() => {
     if (imageFile !== null) uploadImageToCloudinary();
@@ -72,9 +76,9 @@ const ProductImageUpload = ({
       <div
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        // className={`${
-        //   isEditMode ? "opacity-60" : ""
-        // } border-2 border-dashed rounded-lg p-4`}
+        className={`${
+          isEditMode ? "opacity-50 cursor-not-allowed" : ""
+        } border-2 border-dashed rounded-lg p-4`}
       >
         <Input
           id="image-upload"
@@ -82,15 +86,14 @@ const ProductImageUpload = ({
           className="hidden"
           ref={inputRef}
           onChange={handleImageFileChange}
-          //   disabled={isEditMode}
+          disabled={isEditMode}
         />
         {!imageFile ? (
           <Label
             htmlFor="image-upload"
-            // className={`${
-            //   isEditMode ? "cursor-not-allowed" : ""
-            // } flex flex-col items-center justify-center h-32 cursor-pointer`}
-            className="flex flex-col items-center justify-center h-32 cursor-pointer"
+            className={`${
+              isEditMode ? "cursor-not-allowed" : "cursor-pointer"
+            } flex flex-col items-center justify-center h-32 `}
           >
             <UploadCloudIcon className="w-10 h-10 text-muted-foreground mb-2" />
             <span>Drag & drop or click to upload image</span>

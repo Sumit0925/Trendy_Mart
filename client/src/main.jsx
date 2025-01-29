@@ -5,12 +5,15 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import { Toaster } from "./components/ui/toaster";
+import { AppProvider } from "./context/auth-context";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <Provider store={store}>
-      <App />
-      <Toaster/>
-    </Provider>
+    <AppProvider>
+      <Provider store={store}>
+        <App />
+        <Toaster />
+      </Provider>
+    </AppProvider>
   </BrowserRouter>
 );

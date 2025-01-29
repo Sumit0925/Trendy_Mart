@@ -1,7 +1,9 @@
+import { useAppContext } from "@/context/auth-context";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const API = import.meta.env.VITE_APP_URI_API;
+// const { API } = useAppContext();
 
 const initialState = {
   isAuthenticated: false,
