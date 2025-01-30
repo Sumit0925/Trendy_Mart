@@ -10,7 +10,13 @@ import {
 } from "@/components/ui/sheet";
 import { addProductFormElements } from "@/config";
 import { useToast } from "@/hooks/use-toast";
-import { addNewProduct, editProduct, fetchAllProducts } from "@/store/admin/products-slice";
+import { cn } from "@/lib/utils";
+import {
+  addNewProduct,
+  deleteProduct,
+  editProduct,
+  fetchAllProducts,
+} from "@/store/admin/products-slice";
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -42,22 +48,32 @@ const AdminProducts = () => {
     e.preventDefault();
 
     currentEditedId !== null
-      ? dispatch(
-          editProduct({
-            id: currentEditedId,
-            formData,
-          })
-        ).then((data) => {
-          console.log(data, "edit");
+      ? Number(formData.salePrice) < Number(formData.price)
+        ? dispatch(
+            editProduct({
+              id: currentEditedId,
+              formData,
+            })
+          ).then((data) => {
+            console.log(data, "edit");
 
-          if (data?.payload?.success) {
-            dispatch(fetchAllProducts());
-            setFormData(initialFormData);
-            setOpenCreateProductsDialog(false);
-            setCurrentEditedId(null);
-          }
-        })
-      : dispatch(
+            if (data?.payload?.success) {
+              dispatch(fetchAllProducts());
+              setFormData(initialFormData);
+              setOpenCreateProductsDialog(false);
+              setCurrentEditedId(null);
+            }
+          })
+        : toast({
+            className: cn(
+              "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+            ),
+            title: "Sale Price must be less than Price",
+            variant: "destructive",
+            duration: "1000",
+          })
+      : Number(formData.salePrice) < Number(formData.price)
+      ? dispatch(
           addNewProduct({
             ...formData,
             image: uploadedImageUrl,
@@ -72,7 +88,26 @@ const AdminProducts = () => {
               title: "Product added successfully",
             });
           }
+        })
+      : toast({
+          className: cn(
+            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+          ),
+          title: "Sale Price must be less than Price",
+          variant: "destructive",
+          duration: "1200",
         });
+  };
+
+  const handleDelete = (currentProductId) => {
+    dispatch(deleteProduct(currentProductId)).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchAllProducts());
+        toast({
+          title: "Product deleted successfully",
+        });
+      }
+    });
   };
 
   const isFormValid = () => {
@@ -86,7 +121,7 @@ const AdminProducts = () => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
 
-  console.log(formData, "productList");
+  console.log(formData, "formData");
 
   return (
     <Fragment>
@@ -104,7 +139,7 @@ const AdminProducts = () => {
                 setOpenCreateProductsDialog={setOpenCreateProductsDialog}
                 setCurrentEditedId={setCurrentEditedId}
                 product={productItem}
-                // handleDelete={handleDelete}
+                handleDelete={handleDelete}
               />
             ))
           : null}
