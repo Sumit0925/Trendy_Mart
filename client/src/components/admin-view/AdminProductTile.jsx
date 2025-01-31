@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
+import FormatPrice from "@/helpers/FormatPrice";
 
 const AdminProductTile = ({
   product,
@@ -27,10 +28,12 @@ const AdminProductTile = ({
                 product?.salePrice > 0 ? "line-through" : ""
               } text-lg font-semibold text-primary`}
             >
-              ${product?.price}
+              <FormatPrice price={product?.price} />
             </span>
             {product?.salePrice > 0 ? (
-              <span className="text-lg font-bold">${product?.salePrice}</span>
+              <span className="text-lg font-bold">
+                <FormatPrice price={product?.salePrice} />
+              </span>
             ) : null}
           </div>
         </CardContent>

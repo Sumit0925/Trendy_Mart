@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./util/db");
 const authRouter = require("./routes/auth-routes");
 const adminProductsRouter = require("./routes/admin/products-routes");
+const shopProductsRouter = require("./routes/shop/products-routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -29,6 +30,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
+app.use("/api/shop/products", shopProductsRouter);
 
 connectDB().then(() => {
   app.listen(PORT, () => {
