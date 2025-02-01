@@ -3,8 +3,10 @@ import React, { Fragment } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
+import { Button } from "../ui/button";
 
-const ProductFilter = ({ filters, handleFilter }) => {
+const ProductFilter = ({ filters, handleFilter, clearFilter }) => {
+  // console.log(Object.keys(filters));
   return (
     <div className="bg-background rounded-lg shadow-sm">
       <div className="p-5 border-b">
@@ -14,7 +16,7 @@ const ProductFilter = ({ filters, handleFilter }) => {
         {Object.keys(filterOptions).map((keyItem) => (
           <Fragment key={keyItem}>
             <div>
-              <h3 className="text-base font-bold">{keyItem}</h3>
+              <h3 className="text-base font-bold capitalize">{keyItem}</h3>
               <div className="grid gap-2 mt-2">
                 {filterOptions[keyItem].map((option) => (
                   <Label
@@ -28,7 +30,7 @@ const ProductFilter = ({ filters, handleFilter }) => {
                         filters[keyItem] &&
                         filters[keyItem].indexOf(option.id) > -1
                       }
-                    //   onCheckedChange={() => handleFilter(keyItem, option.id)}
+                      onCheckedChange={() => handleFilter(keyItem, option.id)}
                     />
                     {option.label}
                   </Label>
@@ -38,6 +40,9 @@ const ProductFilter = ({ filters, handleFilter }) => {
             <Separator />
           </Fragment>
         ))}
+      </div>
+      <div className="items-center px-4 pb-4 space-y-4">
+        <Button onClick={clearFilter}>Clear Filter</Button>
       </div>
     </div>
   );

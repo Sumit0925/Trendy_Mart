@@ -11,7 +11,7 @@ const AdminHeader = ({ setOpen }) => {
 
   const handleLogout = () => {
     dispatch(logoutUser()).then((data) => {
-      console.log("first", data);
+      // console.log("first", data);
       if (data?.payload?.success) {
         toast({
           title: data?.payload?.message,

@@ -11,7 +11,7 @@ import {
 import { sortOptions } from "@/config";
 import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
 import { ArrowUpDownIcon } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Listing = () => {
@@ -19,6 +19,70 @@ const Listing = () => {
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
+
+  const [filters, setFilters] = useState({});
+  const [sort, setSort] = useState(null);
+
+  const handleSort = (value) => {
+    // console.log("SortValue", value);
+    setSort(value);
+  };
+
+  const handleFilter = (getSectionId, getCurrentOption) => {
+    // console.log("handleFilter", getSectionId, getCurrentOption);
+    // setFilters(getCurrentOption);
+    let tempFilters = { ...filters };
+
+    // const indexOfCurrentSection =
+    //   Object.keys(tempFilters).indexOf(getSectionId);
+    // console.log(indexOfCurrentSection);
+    // if (indexOfCurrentSection === -1) {
+    //   tempFilters = {
+    //     ...tempFilters,
+    //     [getSectionId]: [getCurrentOption],
+    //   };
+    // }
+    if (!tempFilters[getSectionId]) {
+      // tempFilters[getSectionId] = getSectionId;
+
+      //* this will do the same as the above code
+      tempFilters = {
+        ...tempFilters,
+        [getSectionId]: [getCurrentOption],
+      };
+    } else {
+      const indexOfCurrentOption =
+        tempFilters[getSectionId].indexOf(getCurrentOption);
+      // console.log("indexOfCurrentOption", indexOfCurrentOption);
+      if (indexOfCurrentOption === -1) {
+        //* First way
+        // tempFilters[getSectionId].push(getCurrentOption);
+        //* Efficient way
+        tempFilters[getSectionId] = [
+          ...tempFilters[getSectionId],
+          getCurrentOption,
+        ];
+      } else {
+        // tempFilters[getSectionId].splice(indexOfCurrentOption, 1);
+
+        //* Instead of using "splice method" we can use "filter"
+        tempFilters[getSectionId] = tempFilters[getSectionId].filter(
+          (option) => {
+            return option !== getCurrentOption;
+          }
+        );
+      }
+    }
+    console.log(tempFilters);
+    setFilters(tempFilters);
+    sessionStorage.setItem("filters", JSON.stringify(tempFilters));
+  };
+  console.log("filters", filters);
+
+  const clearFilter = () => {
+    sessionStorage.removeItem("filters");
+    setFilters({});
+  };
 
   // const createSearchParamsHelper = (filterParams) => {
   //   const queryParams = [];
@@ -37,13 +101,20 @@ const Listing = () => {
   // };
 
   useEffect(() => {
+    setSort("price-lowtohigh");
+    setFilters(JSON.parse(sessionStorage.getItem("filters")));
+  }, []);
+
+  useEffect(() => {
     dispatch(fetchAllFilteredProducts());
   }, [dispatch]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[150px_1fr] lg:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter
-      // filters={filters} handleFilter={handleFilter}
+        filters={filters}
+        handleFilter={handleFilter}
+        clearFilter={clearFilter}
       />
       <div className="bg-background w-full rounded-lg shadow-sm">
         <div className="p-4 border-b flex items-center justify-between">
@@ -64,9 +135,7 @@ const Listing = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-[200px]">
-                <DropdownMenuRadioGroup
-                // value={sort} onValueChange={handleSort}
-                >
+                <DropdownMenuRadioGroup value={sort} onValueChange={handleSort}>
                   {sortOptions.map((sortItem) => (
                     <DropdownMenuRadioItem
                       value={sortItem.id}

@@ -21,6 +21,7 @@ import {
 } from "../ui/dropdown-menu";
 import { logoutUser } from "@/store/auth-slice";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { useToast } from "@/hooks/use-toast";
 
 const MenuItems = () => {
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ const HeaderRightContent = () => {
   const [openCartSheet, setOpenCartSheet] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { toast } = useToast();
 
   function handleLogout() {
     dispatch(logoutUser()).then((data) => {

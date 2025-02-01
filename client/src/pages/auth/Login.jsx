@@ -21,7 +21,7 @@ const Login = () => {
 
     dispatch(loginUser(formData)).then((data) => {
       if (data?.payload?.success) {
-        console.log(data);
+        // console.log(data);
         toast({
           title: data?.payload?.message,
         });
