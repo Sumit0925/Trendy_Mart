@@ -11,17 +11,18 @@ const API = import.meta.env.VITE_APP_URI_API;
 
 export const fetchAllFilteredProducts = createAsyncThunk(
   "/products/fetchAllProducts",
-  async () => {
+  async ({ filterParams, sortParams }) => {
     // console.log(fetchAllFilteredProducts, "fetchAllFilteredProducts");
 
-    // const query = new URLSearchParams({
-    //   ...filterParams,
-    //   sortBy: sortParams,
-    // });
+    const query = new URLSearchParams({
+      ...filterParams,
+      sortBy: sortParams,
+    });
+    console.log("queryquery", query);
 
-    const result = await axios.get(`${API}/api/shop/products/get`);
+    const result = await axios.get(`${API}/api/shop/products/get?${query}`);
 
-    // console.log(result); 
+    // console.log(result);
 
     return result?.data;
   }

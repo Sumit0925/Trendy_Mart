@@ -13,6 +13,22 @@ import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
 import { ArrowUpDownIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+
+const createSearchParamsHelper = (filters) => {
+  let queryParams = [];
+  for (const [key, value] of Object.entries(filters)) {
+    if (Array.isArray(value) && value.length > 0) {
+      const parmValue = value.join(",");
+      console.log("parmValue", parmValue);
+      // queryParams = [...queryParams, `${key}=${encodeURIComponent(parmValue)}`];
+      queryParams.push(`${key}=${encodeURIComponent(parmValue)}`);
+    }
+  }
+  // queryParams.join("&")
+  console.log(queryParams, "queryParam");
+  return queryParams.join("&");
+};
 
 const Listing = () => {
   const dispatch = useDispatch();
@@ -22,6 +38,7 @@ const Listing = () => {
 
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSort = (value) => {
     // console.log("SortValue", value);
@@ -73,7 +90,7 @@ const Listing = () => {
         );
       }
     }
-    console.log(tempFilters);
+    // console.log(tempFilters);
     setFilters(tempFilters);
     sessionStorage.setItem("filters", JSON.stringify(tempFilters));
   };
@@ -82,32 +99,28 @@ const Listing = () => {
   const clearFilter = () => {
     sessionStorage.removeItem("filters");
     setFilters({});
+    setSearchParams();
   };
 
-  // const createSearchParamsHelper = (filterParams) => {
-  //   const queryParams = [];
-
-  //   for (const [key, value] of Object.entries(filterParams)) {
-  //     if (Array.isArray(value) && value.length > 0) {
-  //       const paramValue = value.join(",");
-
-  //       queryParams.push(`${key}=${encodeURIComponent(paramValue)}`);
-  //     }
-  //   }
-
-  //   console.log(queryParams, "queryParams");
-
-  //   return queryParams.join("&");
-  // };
+  useEffect(() => {
+    if (filters && Object.keys(filters).length > 0) {
+      const createQueryString = createSearchParamsHelper(filters);
+      setSearchParams(new URLSearchParams(createQueryString));
+    }
+  }, [filters]);
+  // console.log(searchParams, "searchParams");
 
   useEffect(() => {
     setSort("price-lowtohigh");
-    setFilters(JSON.parse(sessionStorage.getItem("filters")));
+    setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
   }, []);
 
   useEffect(() => {
-    dispatch(fetchAllFilteredProducts());
-  }, [dispatch]);
+    // if (filters !== null && sort !== null)
+      dispatch(
+        fetchAllFilteredProducts({ filterParams: filters, sortParams: sort })
+      );
+  }, [dispatch, filters, sort]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[150px_1fr] lg:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
