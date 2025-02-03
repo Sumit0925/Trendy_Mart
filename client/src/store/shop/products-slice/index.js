@@ -18,7 +18,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
       ...filterParams,
       sortBy: sortParams,
     });
-    console.log("queryquery", query);
+    // console.log("queryquery", query);
 
     const result = await axios.get(`${API}/api/shop/products/get?${query}`);
 
@@ -28,16 +28,14 @@ export const fetchAllFilteredProducts = createAsyncThunk(
   }
 );
 
-// export const fetchProductDetails = createAsyncThunk(
-//     "/products/fetchProductDetails",
-//     async (id) => {
-//       const result = await axios.get(
-//         `http://localhost:5000/api/shop/products/get/${id}`
-//       );
+export const fetchProductDetails = createAsyncThunk(
+  "/products/fetchProductDetails",
+  async (id) => {
+    const result = await axios.get(`${API}/api/shop/products/get/${id}`);
 
-//       return result?.data;
-//     }
-//   );
+    return result?.data;
+  }
+);
 
 const shoppingProductsSlice = createSlice({
   name: "shoppingProducts",
@@ -56,6 +54,18 @@ const shoppingProductsSlice = createSlice({
       .addCase(fetchAllFilteredProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.productList = [];
+      })
+      .addCase(fetchProductDetails.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchProductDetails.fulfilled, (state, action) => {
+        // console.log(action.payload)
+        state.isLoading = false;
+        state.productDetails = action.payload.data;
+      })
+      .addCase(fetchProductDetails.rejected, (state, action) => {
+        state.isLoading = false;
+        state.productDetails = null;
       });
   },
 });

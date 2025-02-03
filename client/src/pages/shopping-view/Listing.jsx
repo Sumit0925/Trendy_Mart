@@ -1,3 +1,4 @@
+import ProductDetailsDialog from "@/components/shopping-view/ProductDetailsDialog";
 import ProductFilter from "@/components/shopping-view/ProductFilter";
 import ShoppingProductTile from "@/components/shopping-view/ShoppingProductTile";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
-import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/products-slice";
 import { ArrowUpDownIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,6 +43,7 @@ const Listing = () => {
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const handleSort = (value) => {
     // console.log("SortValue", value);
@@ -94,13 +99,18 @@ const Listing = () => {
     setFilters(tempFilters);
     sessionStorage.setItem("filters", JSON.stringify(tempFilters));
   };
-  console.log("filters", filters);
+  // console.log("filters", filters);
 
   const clearFilter = () => {
     sessionStorage.removeItem("filters");
     setFilters({});
     setSearchParams();
   };
+
+  const handleGetProductDetails = (id) => {
+    dispatch(fetchProductDetails(id));
+  };
+  console.log(productDetails);
 
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {
@@ -116,11 +126,15 @@ const Listing = () => {
   }, []);
 
   useEffect(() => {
-    // if (filters !== null && sort !== null)
+    if (filters !== null && sort !== null)
       dispatch(
         fetchAllFilteredProducts({ filterParams: filters, sortParams: sort })
       );
   }, [dispatch, filters, sort]);
+
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailsDialog(true);
+  }, [productDetails]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[150px_1fr] lg:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -167,7 +181,7 @@ const Listing = () => {
             ? productList.map((productItem) => (
                 <ShoppingProductTile
                   key={productItem.title}
-                  // handleGetProductDetails={handleGetProductDetails}
+                  handleGetProductDetails={handleGetProductDetails}
                   product={productItem}
                   // handleAddtoCart={handleAddtoCart}
                 />
@@ -175,11 +189,11 @@ const Listing = () => {
             : null}
         </div>
       </div>
-      {/* <ProductDetailsDialog
+      <ProductDetailsDialog
         open={openDetailsDialog}
         setOpen={setOpenDetailsDialog}
         productDetails={productDetails}
-      /> */}
+      />
     </div>
   );
 };

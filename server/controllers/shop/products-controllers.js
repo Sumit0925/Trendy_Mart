@@ -46,7 +46,7 @@ const getFilteredProducts = async (req, res) => {
       success: true,
       data: products,
     });
-  } catch (e) {
+  } catch (error) {
     console.log(error);
     res.status(500).json({
       success: false,
@@ -66,11 +66,11 @@ const getProductDetails = async (req, res) => {
         message: "Product not found!",
       });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: product,
     });
-  } catch (e) {
+  } catch (error) {
     console.log(error);
     res.status(500).json({
       success: false,
