@@ -22,7 +22,7 @@ const addToCart = async (req, res) => {
       });
     }
 
-    const cart = await Cart.findOne({ userId });
+    let cart = await Cart.findOne({ userId });
 
     if (!cart) {
       cart = new Cart({ userId, items: [] });
@@ -32,7 +32,7 @@ const addToCart = async (req, res) => {
       return item.productId.toString() === productId;
     });
 
-    if (!findCurrentProductIndex) {
+    if (findCurrentProductIndex === -1) {
       cart.items.push({ productId, quantity });
     } else {
       cart.items[findCurrentProductIndex].quantity += quantity;

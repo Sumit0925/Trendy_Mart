@@ -1,5 +1,5 @@
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Link,
   useLocation,
@@ -23,6 +23,8 @@ import { logoutUser } from "@/store/auth-slice";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import TrendyMart from "../../assets/TrendyMart.png";
+import UserCartWrapper from "./userCartWrapper";
+import { fetchCartItems } from "@/store/shop/cart-slice";
 
 const MenuItems = () => {
   const navigate = useNavigate();
@@ -66,7 +68,7 @@ const MenuItems = () => {
 
 const HeaderRightContent = () => {
   const { user } = useSelector((state) => state.auth);
-  // const { cartItems } = useSelector((state) => state.shopCart);
+  const { cartItems } = useSelector((state) => state.shopCart);
   const [openCartSheet, setOpenCartSheet] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -81,12 +83,11 @@ const HeaderRightContent = () => {
       }
     });
   }
+  console.log(cartItems)
 
-  // useEffect(() => {
-  //   dispatch(fetchCartItems(user?.id));
-  // }, [dispatch]);
-
-  // console.log(cartItems, "sangam");
+  useEffect(() => {
+    dispatch(fetchCartItems(user?.id));
+  }, [dispatch]);
 
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
@@ -99,18 +100,18 @@ const HeaderRightContent = () => {
         >
           <ShoppingCart className="w-6 h-6" />
           <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
-            {/* {cartItems?.items?.length || 0} */}0
+            {cartItems?.items?.length || 0}
           </span>
           <span className="sr-only">User cart</span>
         </Button>
-        {/* <UserCartWrapper
+        <UserCartWrapper
           setOpenCartSheet={setOpenCartSheet}
           cartItems={
             cartItems && cartItems.items && cartItems.items.length > 0
               ? cartItems.items
               : []
           }
-        /> */}
+        />
       </Sheet>
 
       <DropdownMenu>

@@ -8,10 +8,20 @@ import {
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { StarIcon } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setProductDetails } from "@/store/shop/products-slice";
 
-const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
+const ProductDetailsDialog = ({
+  open,
+  setOpen,
+  productDetails,
+  handleAddToCart,
+}) => {
+  const dispatch = useDispatch();
+
   const handleDialogClose = () => {
     setOpen(false);
+    dispatch(setProductDetails());
   };
 
   return (
@@ -29,14 +39,12 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
         <div className="">
           <div>
             <DialogTitle>
-              <h1 className="text-3xl font-extrabold">
-                {productDetails?.title}
-              </h1>
+              <p className="text-3xl font-extrabold">{productDetails?.title}</p>
             </DialogTitle>
-            <DialogDescription>
-              <p className="text-muted-foreground text-2xl mb-5 mt-4">
-                {productDetails?.description}
-              </p>
+            <DialogDescription className="text-muted-foreground text-2xl mb-5 mt-4">
+              {/* <p className="text-muted-foreground text-2xl mb-5 mt-4"> */}
+              {productDetails?.description}
+              {/* </p> */}
             </DialogDescription>
           </div>
           <div className="flex items-center justify-between">
