@@ -17,11 +17,15 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { fetchAllFilteredProducts, fetchProductDetails } from "@/store/shop/products-slice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/products-slice";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ShoppingProductTile from "@/components/shopping-view/ShoppingProductTile";
 import ProductDetailsDialog from "@/components/shopping-view/ProductDetailsDialog";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -63,9 +67,9 @@ const Home = () => {
     navigate(`/shop/listing`);
   };
 
- const  handleGetProductDetails= (getCurrentProductId)=> {
+  const handleGetProductDetails = (getCurrentProductId) => {
     dispatch(fetchProductDetails(getCurrentProductId));
-  }
+  };
 
   const handleAddtoCart = (getCurrentProductId) => {
     dispatch(
@@ -149,12 +153,12 @@ const Home = () => {
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">
-            Shop by category
+            Shop by Category
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {categoriesWithIcon.map((categoryItem) => (
               <Card
-              key={categoryItem.id}
+                key={categoryItem.id}
                 onClick={() =>
                   handleNavigateToListingPage(categoryItem, "category")
                 }
@@ -176,7 +180,7 @@ const Home = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {brandsWithIcon.map((brandItem) => (
               <Card
-              key={brandItem.id}
+                key={brandItem.id}
                 onClick={() => handleNavigateToListingPage(brandItem, "brand")}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
@@ -197,14 +201,18 @@ const Home = () => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productList && productList.length > 0
-              ? productList.map((productItem) => (
-                  <ShoppingProductTile
-                    key={productItem.title}
-                    handleGetProductDetails={handleGetProductDetails}
-                    product={productItem}
-                    handleAddtoCart={handleAddtoCart}
-                  />
-                ))
+              ? productList.map((productItem, index) => {
+                  // if (index < 4) {
+                    return (
+                      <ShoppingProductTile
+                        key={productItem.title}
+                        handleGetProductDetails={handleGetProductDetails}
+                        product={productItem}
+                        handleAddtoCart={handleAddtoCart}
+                      />
+                    );
+                  // }
+                })
               : null}
           </div>
         </div>
