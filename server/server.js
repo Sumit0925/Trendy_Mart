@@ -7,6 +7,7 @@ const authRouter = require("./routes/auth-routes");
 const adminProductsRouter = require("./routes/admin/products-routes");
 const shopProductsRouter = require("./routes/shop/products-routes");
 const shopCartRouter = require("./routes/shop/cart-routes");
+const shopAddressRouter = require("./routes/shop/address-routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,18 +22,20 @@ const corsOptions = {
     "Expires",
     "Pragma",
   ],
-  credentials: true,
+  credentials: true, //* Allow cookies to be sent
 };
 
 app.use(cors(corsOptions));
 
-app.use(cookieParser());
+app.use(cookieParser());//* To parse cookies in Express
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
+
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);
+app.use("/api/shop/address", shopAddressRouter);
 
 connectDB().then(() => {
   app.listen(PORT, () => {

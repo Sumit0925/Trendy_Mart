@@ -24,7 +24,7 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk("/auth/login", async (formData) => {
   const response = await axios.post(`${API}/api/auth/login`, formData, {
-    withCredentials: true,
+    withCredentials: true, //* This ensures the cookie set by the server is stored in the browser.
   });
   // console.log(response);
   return response.data;
@@ -57,6 +57,19 @@ export const checkAuth = createAsyncThunk(
     return response.data;
   }
 );
+
+/*
+* Explanation of Each Cache-Control Directive:
+? Directive	                   Purpose
+~ no-store	->   Prevents storing the response in any cache.
+~ no-cache	->   Forces validation with the server before serving a cached response.
+~ must-revalidate ->	Ensures the response is always checked before being used from cache.
+~ proxy-revalidate ->	Ensures proxies (e.g., CDNs) also validate the response before serving it.
+
+! Why This Is Important?
+^--> Prevents users from seeing outdated authentication data if they refresh the page.
+^--> Ensures the authentication check always contacts the server instead of using a cached response.
+*/
 
 const authSlice = createSlice({
   name: "auth",

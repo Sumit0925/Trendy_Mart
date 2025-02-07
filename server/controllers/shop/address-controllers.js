@@ -1,5 +1,6 @@
 const Address = require("../../models/address-model");
 
+// * Adding Address Logic
 const addAddress = async (req, res) => {
   try {
     const { userId, address, city, pincode, phone, notes } = req.body;
@@ -30,11 +31,12 @@ const addAddress = async (req, res) => {
     console.log(e);
     res.status(500).json({
       success: false,
-      message: "Error",
+      message: "Error while adding address",
     });
   }
 };
 
+//* Fetching Addrress Logic
 const fetchAllAddress = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -55,11 +57,12 @@ const fetchAllAddress = async (req, res) => {
     console.log(e);
     res.status(500).json({
       success: false,
-      message: "Error",
+      message: "Error while fetching address",
     });
   }
 };
 
+//* Editing Address Logic
 const editAddress = async (req, res) => {
   try {
     const { userId, addressId } = req.params;
@@ -84,7 +87,7 @@ const editAddress = async (req, res) => {
     if (!address) {
       return res.status(404).json({
         success: false,
-        message: "Address not found",
+        message: "Address not found!",
       });
     }
 
@@ -96,11 +99,12 @@ const editAddress = async (req, res) => {
     console.log(e);
     res.status(500).json({
       success: false,
-      message: "Error",
+      message: "Error while editing address",
     });
   }
 };
 
+//* Deleting a Address Logic
 const deleteAddress = async (req, res) => {
   try {
     const { userId, addressId } = req.params;
@@ -128,7 +132,7 @@ const deleteAddress = async (req, res) => {
     console.log(e);
     res.status(500).json({
       success: false,
-      message: "Error",
+      message: "Error while Deleting address",
     });
   }
 };
