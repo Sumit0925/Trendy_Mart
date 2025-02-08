@@ -35,7 +35,7 @@ const App = () => {
   }
 
   return (
-    <div className="flex flex-col overflow-hidden bg-white">
+    <div className="flex flex-col max-w-screen-2xl mx-auto overflow-hidden bg-white ">
       <Routes>
         <Route
           path="/"
