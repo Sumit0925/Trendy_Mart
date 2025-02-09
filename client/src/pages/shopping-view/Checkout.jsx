@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import FormatPrice from "@/helpers/FormatPrice";
 
 const Checkout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -116,7 +117,7 @@ const Checkout = () => {
           <div className="mt-8 space-y-4">
             <div className="flex justify-between">
               <span className="font-bold">Total</span>
-              <span className="font-bold">${totalCartAmount}</span>
+              <span className="font-bold"><FormatPrice priceTwoDigit={totalCartAmount}/></span>
             </div>
           </div>
           <div className="mt-4 w-full">
