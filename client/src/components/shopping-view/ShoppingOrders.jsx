@@ -14,26 +14,28 @@ import { Dialog } from "../ui/dialog";
 import { Button } from "../ui/button";
 import ShoppingOrderDetailsView from "./ShoppingOrderDetailsView";
 import FormatPrice from "@/helpers/FormatPrice";
+import { getAllOrdersByUserId, getOrderDetails, resetOrderDetails } from "@/store/shop/order-slice";
 
 const ShoppingOrders = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const { user } = useSelector((state) => state.auth);
-  // const { orderList, orderDetails } = useSelector((state) => state.shopOrder);
+  const { orderList, orderDetails } = useSelector((state) => state.shopOrder);
   const dispatch = useDispatch();
 
   const handleFetchOrderDetails = (getId) => {
+    console.log(getId)
     dispatch(getOrderDetails(getId));
   };
 
-  // useEffect(() => {
-  //   dispatch(getAllOrdersByUserId(user?.id));
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getAllOrdersByUserId(user?.id));
+  }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (orderDetails !== null) setOpenDetailsDialog(true);
-  // }, [orderDetails]);
+  useEffect(() => {
+    if (orderDetails !== null) setOpenDetailsDialog(true);
+  }, [orderDetails]);
 
-  // console.log(orderDetails, "orderDetails");
+  console.log(orderDetails, "orderDetails");
 
   return (
     <Card>
@@ -53,10 +55,10 @@ const ShoppingOrders = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
-          {/* <TableBody>
+          <TableBody>
             {orderList && orderList.length > 0
               ? orderList.map((orderItem) => (
-                  <TableRow>
+                  <TableRow key={orderItem?._id}>
                     <TableCell>{orderItem?._id}</TableCell>
                     <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
                     <TableCell>
@@ -91,14 +93,14 @@ const ShoppingOrders = () => {
                           View Details
                         </Button>
                         <ShoppingOrderDetailsView
-                        //  orderDetails={orderDetails}
+                         orderDetails={orderDetails}
                         />
                       </Dialog>
                     </TableCell>
                   </TableRow>
                 ))
               : null}
-          </TableBody> */}
+          </TableBody>
         </Table>
       </CardContent>
     </Card>

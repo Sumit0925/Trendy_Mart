@@ -15,7 +15,7 @@ const store = configureStore({
     shopProducts: shopProductsSlice,
     shopCart: shopCartSlice,
     shopAddress: shopAddressSlice,
-    shopOder: shopOrderSlice,
+    shopOrder: shopOrderSlice,
   },
 });
 

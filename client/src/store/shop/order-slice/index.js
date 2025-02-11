@@ -4,12 +4,13 @@ import axios from "axios";
 const API = import.meta.env.VITE_APP_URI_API;
 
 const initialState = {
-  approvalURL: null,
   isLoading: false,
   orderId: null,
   orderList: [],
   orderDetails: null,
 };
+
+// Create a new Razorpay order
 
 export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
@@ -18,23 +19,27 @@ export const createNewOrder = createAsyncThunk(
       `${API}/api/shop/order/create`,
       orderData
     );
-
+    console.log("hello")
     return response.data;
   }
 );
 
+// Capture and verify Razorpay payment
+
 export const capturePayment = createAsyncThunk(
   "/order/capturePayment",
-  async ({ paymentId, payerId, orderId }) => {
+  async ({ orderId, paymentId, razorpaySignature }) => {
     const response = await axios.post(`${API}/api/shop/order/capture`, {
-      paymentId,
-      payerId,
       orderId,
+      paymentId,
+      razorpaySignature,
     });
 
     return response.data;
   }
 );
+
+// Fetch all orders for a user
 
 export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUserId",
@@ -44,6 +49,8 @@ export const getAllOrdersByUserId = createAsyncThunk(
     return response.data;
   }
 );
+
+// Get order details
 
 export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
@@ -71,7 +78,6 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(createNewOrder.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.approvalURL = action.payload.approvalURL;
         state.orderId = action.payload.orderId;
         sessionStorage.setItem(
           "currentOrderId",
@@ -80,7 +86,6 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(createNewOrder.rejected, (state) => {
         state.isLoading = false;
-        state.approvalURL = null;
         state.orderId = null;
       })
       .addCase(getAllOrdersByUserId.pending, (state) => {
