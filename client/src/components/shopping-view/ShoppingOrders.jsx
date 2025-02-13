@@ -14,7 +14,11 @@ import { Dialog } from "../ui/dialog";
 import { Button } from "../ui/button";
 import ShoppingOrderDetailsView from "./ShoppingOrderDetailsView";
 import FormatPrice from "@/helpers/FormatPrice";
-import { getAllOrdersByUserId, getOrderDetails, resetOrderDetails } from "@/store/shop/order-slice";
+import {
+  getAllOrdersByUserId,
+  getOrderDetails,
+  resetOrderDetails,
+} from "@/store/shop/order-slice";
 
 const ShoppingOrders = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
@@ -23,7 +27,7 @@ const ShoppingOrders = () => {
   const dispatch = useDispatch();
 
   const handleFetchOrderDetails = (getId) => {
-    console.log(getId)
+    console.log(getId);
     dispatch(getOrderDetails(getId));
   };
 
@@ -40,7 +44,7 @@ const ShoppingOrders = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Order History</CardTitle>
+        <CardTitle className="text-center">Order History</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -64,9 +68,10 @@ const ShoppingOrders = () => {
                     <TableCell>
                       <Badge
                         className={`py-1 px-3 ${
-                          orderItem?.orderStatus === "confirmed"
+                          orderItem?.orderStatus.toLowerCase() === "confirmed"
                             ? "bg-green-500"
-                            : orderItem?.orderStatus === "rejected"
+                            : orderItem?.orderStatus.toLowerCase() ===
+                              "rejected"
                             ? "bg-red-600"
                             : "bg-black"
                         }`}
@@ -92,9 +97,7 @@ const ShoppingOrders = () => {
                         >
                           View Details
                         </Button>
-                        <ShoppingOrderDetailsView
-                         orderDetails={orderDetails}
-                        />
+                        <ShoppingOrderDetailsView orderDetails={orderDetails} />
                       </Dialog>
                     </TableCell>
                   </TableRow>

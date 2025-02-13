@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -13,25 +14,30 @@ import { Badge } from "../ui/badge";
 import { Dialog } from "../ui/dialog";
 import { Button } from "../ui/button";
 import AdminOrderDetailsView from "./AdminOrderDetailsView";
+import {
+  getAllOrdersForAdmin,
+  getOrderDetailsForAdmin,
+  resetOrderDetails,
+} from "@/store/admin/order-slice";
 
 const AdminOrdersView = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-//   const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
+  const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
   const dispatch = useDispatch();
 
   const handleFetchOrderDetails = (getId) => {
     dispatch(getOrderDetailsForAdmin(getId));
   };
 
-  //   useEffect(() => {
-  //     dispatch(getAllOrdersForAdmin());
-  //   }, [dispatch]);
+  useEffect(() => {
+    dispatch(getAllOrdersForAdmin());
+  }, [dispatch]);
 
-  //   console.log(orderDetails, "orderList");
+  // console.log(orderDetails, "orderList");
 
-  //   useEffect(() => {
-  //     if (orderDetails !== null) setOpenDetailsDialog(true);
-  //   }, [orderDetails]);
+  useEffect(() => {
+    if (orderDetails !== null) setOpenDetailsDialog(true);
+  }, [orderDetails]);
 
   return (
     <Card>
@@ -51,7 +57,7 @@ const AdminOrdersView = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
-          {/* <TableBody>
+          <TableBody>
             {orderList && orderList.length > 0
               ? orderList.map((orderItem) => (
                   <TableRow>
@@ -60,9 +66,10 @@ const AdminOrdersView = () => {
                     <TableCell>
                       <Badge
                         className={`py-1 px-3 ${
-                          orderItem?.orderStatus === "confirmed"
+                          orderItem?.orderStatus.toLowerCase() === "confirmed"
                             ? "bg-green-500"
-                            : orderItem?.orderStatus === "rejected"
+                            : orderItem?.orderStatus.toLowerCase() ===
+                              "rejected"
                             ? "bg-red-600"
                             : "bg-black"
                         }`}
@@ -88,13 +95,16 @@ const AdminOrdersView = () => {
                         >
                           View Details
                         </Button>
-                        <AdminOrderDetailsView orderDetails={orderDetails} />
+                        <AdminOrderDetailsView
+                          orderDetails={orderDetails}
+                          setOpenDetailsDialog={setOpenDetailsDialog}
+                        />
                       </Dialog>
                     </TableCell>
                   </TableRow>
                 ))
               : null}
-          </TableBody> */}
+          </TableBody>
         </Table>
       </CardContent>
     </Card>

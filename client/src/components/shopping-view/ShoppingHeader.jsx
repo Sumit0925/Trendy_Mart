@@ -31,7 +31,7 @@ const MenuItems = () => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  function handleNavigate(getCurrentMenuItem) {
+  const handleNavigate = (getCurrentMenuItem) => {
     sessionStorage.removeItem("filters");
     setSearchParams();
     const currentFilter =
@@ -50,7 +50,7 @@ const MenuItems = () => {
           new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
         )
       : navigate(getCurrentMenuItem.path);
-  }
+  };
 
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
@@ -70,6 +70,7 @@ const MenuItems = () => {
 const HeaderRightContent = () => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
+  const { orderList } = useSelector((state) => state.shopOrder);
   const [openCartSheet, setOpenCartSheet] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();

@@ -10,7 +10,7 @@ const ShoppingOrderDetailsView = ({ orderDetails }) => {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <DialogContent className="sm:max-w-[600px] sm:max-h-screen overflow-auto">
+    <DialogContent className="sm:max-w-[600px] ">
       <div className="grid gap-6">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">
@@ -40,9 +40,9 @@ const ShoppingOrderDetailsView = ({ orderDetails }) => {
             <Label>
               <Badge
                 className={`py-1 px-3 ${
-                  orderDetails?.orderStatus === "confirmed"
+                  orderDetails?.orderStatus.toLowerCase() === "confirmed"
                     ? "bg-green-500"
-                    : orderDetails?.orderStatus === "rejected"
+                    : orderDetails?.orderStatus.toLowerCase() === "rejected"
                     ? "bg-red-600"
                     : "bg-black"
                 }`}
@@ -58,8 +58,8 @@ const ShoppingOrderDetailsView = ({ orderDetails }) => {
             <div className="font-medium">Order Details</div>
             <ul className="grid gap-3">
               {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
-                ? orderDetails?.cartItems.map((item) => (
-                    <li className="flex items-center justify-between">
+                ? orderDetails?.cartItems.map((item,index) => (
+                    <li key={index} className="flex flex-col sm:flex-row sm:items-center justify-between text-sm">
                       <span>Title: {item.title}</span>
                       <span>Quantity: {item.quantity}</span>
                       <span>

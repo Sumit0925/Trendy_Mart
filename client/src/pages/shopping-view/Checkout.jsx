@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FormatPrice from "@/helpers/FormatPrice";
 import { useNavigate } from "react-router-dom";
 import { capturePayment, createNewOrder } from "@/store/shop/order-slice";
+import { fetchCartItems } from "@/store/shop/cart-slice";
 
 const Checkout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -122,10 +123,11 @@ const Checkout = () => {
                 paymentId: response.razorpay_payment_id,
                 razorpaySignature: response.razorpay_signature,
               })
-            )
+            );
 
             if (verifyRes?.payload?.success) {
               toast({ title: "Payment Successful!", variant: "success" });
+              dispatch(fetchCartItems(user?.id));
               navigate("/shop/payment-success"); // Redirect to success page
             } else {
               throw new Error("Payment verification failed");
@@ -147,7 +149,7 @@ const Checkout = () => {
         modal: {
           ondismiss: () => {
             toast({ title: "Payment Cancelled!", variant: "destructive" });
-            navigate("/payment-failed"); // Redirect if user closes Razorpay modal
+            navigate("/shop/payment-failed"); // Redirect if user closes Razorpay modal
           },
         },
       };

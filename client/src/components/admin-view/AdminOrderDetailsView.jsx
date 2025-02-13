@@ -7,11 +7,16 @@ import { Label } from "../ui/label";
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import FormatPrice from "@/helpers/FormatPrice";
+import {
+  getAllOrdersForAdmin,
+  getOrderDetailsForAdmin,
+  updateOrderStatus,
+} from "@/store/admin/order-slice";
 
 const initialFormData = {
   status: "",
 };
-const AdminOrderDetailsView = ({ orderDetails }) => {
+const AdminOrderDetailsView = ({ orderDetails, setOpenDetailsDialog }) => {
   const [formData, setFormData] = useState(initialFormData);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -19,26 +24,27 @@ const AdminOrderDetailsView = ({ orderDetails }) => {
 
   // console.log(orderDetails, "orderDetailsorderDetails");
 
-  //   const handleUpdateStatus = (event) => {
-  //     event.preventDefault();
-  //     const { status } = formData;
+  const handleUpdateStatus = (event) => {
+    event.preventDefault();
+    const { status } = formData;
 
-  //     dispatch(
-  //       updateOrderStatus({ id: orderDetails?._id, orderStatus: status })
-  //     ).then((data) => {
-  //       if (data?.payload?.success) {
-  //         dispatch(getOrderDetailsForAdmin(orderDetails?._id));
-  //         dispatch(getAllOrdersForAdmin());
-  //         setFormData(initialFormData);
-  //         toast({
-  //           title: data?.payload?.message,
-  //         });
-  //       }
-  //     });
-  //   };
+    dispatch(
+      updateOrderStatus({ id: orderDetails?._id, orderStatus: status })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(getOrderDetailsForAdmin(orderDetails?._id));
+        dispatch(getAllOrdersForAdmin());
+        setFormData(initialFormData);
+        setOpenDetailsDialog(false);
+        toast({
+          title: data?.payload?.message,
+        });
+      }
+    });
+  };
 
   return (
-    <DialogContent className="sm:max-w-[600px]">
+    <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-auto">
       <div className="grid gap-6">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">
@@ -132,7 +138,7 @@ const AdminOrderDetailsView = ({ orderDetails }) => {
             formData={formData}
             setFormData={setFormData}
             buttonText={"Update Order Status"}
-            // onSubmit={handleUpdateStatus}
+            onSubmit={handleUpdateStatus}
           />
         </div>
       </div>
