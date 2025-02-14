@@ -10,7 +10,10 @@ const ShoppingOrderDetailsView = ({ orderDetails }) => {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <DialogContent className="sm:max-w-[600px] ">
+    <DialogContent
+      className="sm:max-w-[600px] max-h-[90vh] overflow-auto"
+      style={{ scrollbarWidth: "none" }}
+    >
       <div className="grid gap-6">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">
@@ -58,8 +61,11 @@ const ShoppingOrderDetailsView = ({ orderDetails }) => {
             <div className="font-medium">Order Details</div>
             <ul className="grid gap-3">
               {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
-                ? orderDetails?.cartItems.map((item,index) => (
-                    <li key={index} className="flex flex-col sm:flex-row sm:items-center justify-between text-sm">
+                ? orderDetails?.cartItems.map((item, index) => (
+                    <li
+                      key={index}
+                      className="flex flex-col sm:flex-row sm:items-center justify-between text-sm"
+                    >
                       <span>Title: {item.title}</span>
                       <span>Quantity: {item.quantity}</span>
                       <span>
@@ -80,7 +86,7 @@ const ShoppingOrderDetailsView = ({ orderDetails }) => {
               <span>{orderDetails?.addressInfo?.city}</span>
               <span>{orderDetails?.addressInfo?.pincode}</span>
               <span>{orderDetails?.addressInfo?.phone}</span>
-              <span>{orderDetails?.addressInfo?.notes}</span>
+              <span>Note : {orderDetails?.addressInfo?.notes}</span>
             </div>
           </div>
         </div>

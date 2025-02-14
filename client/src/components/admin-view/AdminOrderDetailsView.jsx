@@ -44,7 +44,10 @@ const AdminOrderDetailsView = ({ orderDetails, setOpenDetailsDialog }) => {
   };
 
   return (
-    <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-auto">
+    <DialogContent
+      className="sm:max-w-[600px] max-h-[90vh] overflow-auto"
+      style={{ scrollbarWidth: "none" }}
+    >
       <div className="grid gap-6">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">
@@ -74,9 +77,9 @@ const AdminOrderDetailsView = ({ orderDetails, setOpenDetailsDialog }) => {
             <Label>
               <Badge
                 className={`py-1 px-3 ${
-                  orderDetails?.orderStatus === "confirmed"
+                  orderDetails?.orderStatus.toLowerCase() === "confirmed"
                     ? "bg-green-500"
-                    : orderDetails?.orderStatus === "rejected"
+                    : orderDetails?.orderStatus.toLowerCase() === "rejected"
                     ? "bg-red-600"
                     : "bg-black"
                 }`}
@@ -92,8 +95,11 @@ const AdminOrderDetailsView = ({ orderDetails, setOpenDetailsDialog }) => {
             <div className="font-medium">Order Details</div>
             <ul className="grid gap-3">
               {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
-                ? orderDetails?.cartItems.map((item) => (
-                    <li className="flex items-center justify-between">
+                ? orderDetails?.cartItems.map((item, index) => (
+                    <li
+                      key={index}
+                      className="flex flex-col sm:flex-row sm:items-center justify-between text-sm"
+                    >
                       <span>Title: {item.title}</span>
                       <span>Quantity: {item.quantity}</span>
                       <span>
@@ -109,12 +115,12 @@ const AdminOrderDetailsView = ({ orderDetails, setOpenDetailsDialog }) => {
           <div className="grid gap-2">
             <div className="font-medium">Shipping Info</div>
             <div className="grid gap-0.5 text-muted-foreground">
-              <span>{user.userName}</span>
+              <span>{orderDetails?.userName}</span>
               <span>{orderDetails?.addressInfo?.address}</span>
               <span>{orderDetails?.addressInfo?.city}</span>
               <span>{orderDetails?.addressInfo?.pincode}</span>
               <span>{orderDetails?.addressInfo?.phone}</span>
-              <span>{orderDetails?.addressInfo?.notes}</span>
+              <span>Note : {orderDetails?.addressInfo?.notes}</span>
             </div>
           </div>
         </div>

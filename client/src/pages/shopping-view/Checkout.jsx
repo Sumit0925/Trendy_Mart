@@ -68,6 +68,7 @@ const Checkout = () => {
 
     const orderData = {
       userId: user?.id,
+      userName: user?.userName,
       cartId: cartItems?._id,
       cartItems: cartItems.items.map((item) => ({
         productId: item?.productId,
@@ -191,7 +192,7 @@ const Checkout = () => {
             <div className="flex justify-between">
               <span className="font-bold">Total</span>
               <span className="font-bold">
-                <FormatPrice priceTwoDigit={totalCartAmount} />
+                <FormatPrice priceTwoDigit={totalCartAmount.toFixed(2)} />
               </span>
             </div>
           </div>

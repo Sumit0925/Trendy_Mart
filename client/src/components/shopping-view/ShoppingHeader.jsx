@@ -6,7 +6,13 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetTrigger,
+} from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { Label } from "../ui/label";
@@ -26,7 +32,7 @@ import TrendyMart from "../../assets/TrendyMart.png";
 import UserCartWrapper from "./userCartWrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 
-const MenuItems = () => {
+const MenuItems = ({ closeMenuSheet }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,7 +62,10 @@ const MenuItems = () => {
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
         <Label
-          onClick={() => handleNavigate(menuItem)}
+          onClick={() => {
+            handleNavigate(menuItem);
+            closeMenuSheet();
+          }}
           className="text-sm font-medium cursor-pointer"
           key={menuItem.id}
         >
@@ -67,7 +76,7 @@ const MenuItems = () => {
   );
 };
 
-const HeaderRightContent = () => {
+const HeaderRightContent = ({ closeMenuSheet }) => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
   const { orderList } = useSelector((state) => state.shopOrder);
@@ -95,7 +104,9 @@ const HeaderRightContent = () => {
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
         <Button
-          onClick={() => setOpenCartSheet(true)}
+          onClick={() => {
+            setOpenCartSheet(true);
+          }}
           variant="outline"
           size="icon"
           className="relative"
@@ -108,6 +119,7 @@ const HeaderRightContent = () => {
         </Button>
         <UserCartWrapper
           setOpenCartSheet={setOpenCartSheet}
+          closeMenuSheet={closeMenuSheet}
           cartItems={
             cartItems && cartItems.items && cartItems.items.length > 0
               ? cartItems.items
@@ -129,7 +141,12 @@ const HeaderRightContent = () => {
             Logged in as <span className="capitalize">{user?.userName}</span>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => navigate("/shop/account")}>
+          <DropdownMenuItem
+            onClick={() => {
+              navigate("/shop/account");
+              closeMenuSheet();
+            }}
+          >
             <UserCog className="mr-2 h-4 w-4" />
             Account
           </DropdownMenuItem>
@@ -145,7 +162,12 @@ const HeaderRightContent = () => {
 };
 
 const ShoppingHeader = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  // const { isAuthenticated } = useSelector((state) => state.auth);
+  const [openSheet, setOpenSheet] = useState(false);
+
+  const closeMenuSheet = () => {
+    setOpenSheet(false);
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -158,16 +180,19 @@ const ShoppingHeader = () => {
           </span>
         </Link>
 
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle header menu</span>
-            </Button>
-          </SheetTrigger>
+        <Sheet open={openSheet} onOpenChange={closeMenuSheet}>
+          <Button
+            variant="outline"
+            size="icon"
+            className="lg:hidden"
+            onClick={() => setOpenSheet(true)}
+          >
+            <Menu className="h-6 w-6" />
+            <span className="sr-only">Toggle header menu</span>
+          </Button>
           <SheetContent side="left" className="w-full max-w-xs">
-            <MenuItems />
-            <HeaderRightContent />
+            <MenuItems closeMenuSheet={closeMenuSheet} />
+            <HeaderRightContent closeMenuSheet={closeMenuSheet} />
           </SheetContent>
         </Sheet>
 

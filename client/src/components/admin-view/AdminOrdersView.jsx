@@ -40,12 +40,12 @@ const AdminOrdersView = () => {
   }, [orderDetails]);
 
   return (
-    <Card>
+    <Card >
       <CardHeader>
-        <CardTitle>All Orders</CardTitle>
+        <CardTitle className="text-center">All Orders</CardTitle>
       </CardHeader>
-      <CardContent>
-        <Table>
+      <CardContent >
+        <Table className="overflow-auto w-full" >
           <TableHeader>
             <TableRow>
               <TableHead>Order ID</TableHead>
@@ -58,52 +58,58 @@ const AdminOrdersView = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orderList && orderList.length > 0
-              ? orderList.map((orderItem) => (
-                  <TableRow>
-                    <TableCell>{orderItem?._id}</TableCell>
-                    <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
-                    <TableCell>
-                      <Badge
-                        className={`py-1 px-3 ${
-                          orderItem?.orderStatus.toLowerCase() === "confirmed"
-                            ? "bg-green-500"
-                            : orderItem?.orderStatus.toLowerCase() ===
-                              "rejected"
-                            ? "bg-red-600"
-                            : "bg-black"
-                        }`}
+            {orderList && orderList.length > 0 ? (
+              orderList.map((orderItem, index) => (
+                <TableRow key={index}>
+                  <TableCell>{orderItem?._id}</TableCell>
+                  <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
+                  <TableCell>
+                    <Badge
+                      className={`py-1 px-3 ${
+                        orderItem?.orderStatus.toLowerCase() === "confirmed"
+                          ? "bg-green-500"
+                          : orderItem?.orderStatus.toLowerCase() === "rejected"
+                          ? "bg-red-600"
+                          : "bg-black"
+                      }`}
+                    >
+                      {orderItem?.orderStatus}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <FormatPrice priceTwoDigit={orderItem?.totalAmount} />
+                  </TableCell>
+                  <TableCell>
+                    <Dialog
+                      open={openDetailsDialog}
+                      onOpenChange={() => {
+                        setOpenDetailsDialog(false);
+                        dispatch(resetOrderDetails());
+                      }}
+                    >
+                      <Button
+                        onClick={() => handleFetchOrderDetails(orderItem?._id)}
                       >
-                        {orderItem?.orderStatus}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <FormatPrice priceTwoDigit={orderItem?.totalAmount} />
-                    </TableCell>
-                    <TableCell>
-                      <Dialog
-                        open={openDetailsDialog}
-                        onOpenChange={() => {
-                          setOpenDetailsDialog(false);
-                          dispatch(resetOrderDetails());
-                        }}
-                      >
-                        <Button
-                          onClick={() =>
-                            handleFetchOrderDetails(orderItem?._id)
-                          }
-                        >
-                          View Details
-                        </Button>
-                        <AdminOrderDetailsView
-                          orderDetails={orderDetails}
-                          setOpenDetailsDialog={setOpenDetailsDialog}
-                        />
-                      </Dialog>
-                    </TableCell>
-                  </TableRow>
-                ))
-              : null}
+                        View Details
+                      </Button>
+                      <AdminOrderDetailsView
+                        orderDetails={orderDetails}
+                        setOpenDetailsDialog={setOpenDetailsDialog}
+                      />
+                    </Dialog>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className="text-center py-4 font-bold text-lg"
+                >
+                  No Orders Found!
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </CardContent>

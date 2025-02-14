@@ -15,6 +15,7 @@ const createOrder = async (req, res) => {
   try {
     const {
       userId,
+      userName,
       cartId,
       cartItems,
       addressInfo,
@@ -39,6 +40,7 @@ const createOrder = async (req, res) => {
 
     const newlyCreatedOrder = new Order({
       userId,
+      userName,
       cartId,
       cartItems,
       addressInfo,

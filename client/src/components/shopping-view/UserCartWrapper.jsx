@@ -5,7 +5,7 @@ import UserCartItemsContent from "./UserCartItemsContent";
 import { Button } from "../ui/button";
 import FormatPrice from "@/helpers/FormatPrice";
 
-const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
+const UserCartWrapper = ({ cartItems, setOpenCartSheet, closeMenuSheet }) => {
   const navigate = useNavigate();
   const totalCartAmount =
     cartItems && cartItems.length > 0
@@ -44,6 +44,7 @@ const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
         onClick={() => {
           navigate("/shop/checkout");
           setOpenCartSheet(false);
+          closeMenuSheet();
         }}
         className="w-full mt-6"
       >
