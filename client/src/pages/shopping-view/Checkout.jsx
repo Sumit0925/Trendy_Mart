@@ -1,7 +1,7 @@
 import Address from "@/components/shopping-view/Address";
 // import img from "../../assets/35832.jpg"
-// import img from "../../assets/shopping-cart-black-background-with-copy-space.jpg";
-import img from "../../assets/shopping-cart.jpg";
+import img from "../../assets/freepik_expand_1.jpg";
+// import img from "../../assets/shopping-cart.jpg";
 import UserCartItemsContent from "@/components/shopping-view/UserCartItemsContent";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -174,7 +174,7 @@ const Checkout = () => {
       <div className="relative h-[380px] w-full overflow-hidden">
         <img
           src={img}
-          className="h-full w-full object-cover object-left sm:object-cover sm:object-bottom"
+          className="h-full w-full object-cover sm:object-cover"
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5">

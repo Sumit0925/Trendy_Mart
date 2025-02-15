@@ -76,7 +76,7 @@ const MenuItems = ({ closeMenuSheet }) => {
   );
 };
 
-const HeaderRightContent = ({ closeMenuSheet }) => {
+const HeaderRightContent = ({ closeMenuSheet, setOpenSheet }) => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
   const { orderList } = useSelector((state) => state.shopOrder);
@@ -144,11 +144,15 @@ const HeaderRightContent = ({ closeMenuSheet }) => {
           <DropdownMenuItem
             onClick={() => {
               navigate("/shop/account");
-              closeMenuSheet();
             }}
           >
-            <UserCog className="mr-2 h-4 w-4" />
-            Account
+            <button
+              className="flex gap-2 justify-center items-center "
+              onClick={closeMenuSheet}
+            >
+              <UserCog className="mr-2 h-4 w-4" />
+              Account
+            </button>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>
@@ -170,7 +174,7 @@ const ShoppingHeader = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
+    <header className="sticky top-[0] z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-2">
           <HousePlug className="h-6 w-6" />
@@ -192,7 +196,10 @@ const ShoppingHeader = () => {
           </Button>
           <SheetContent side="left" className="w-full max-w-xs">
             <MenuItems closeMenuSheet={closeMenuSheet} />
-            <HeaderRightContent closeMenuSheet={closeMenuSheet} />
+            <HeaderRightContent
+              closeMenuSheet={closeMenuSheet}
+              setOpenSheet={setOpenSheet}
+            />
           </SheetContent>
         </Sheet>
 
