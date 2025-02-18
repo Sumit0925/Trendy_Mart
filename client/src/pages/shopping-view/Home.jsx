@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-  Airplay,
   BabyIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  CloudLightning,
-  Heater,
-  Images,
-  Shirt,
-  ShirtIcon,
-  ShoppingBasket,
-  UmbrellaIcon,
-  WashingMachine,
   WatchIcon,
 } from "lucide-react";
+import { GiConverseShoe, GiLargeDress, GiPoloShirt } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -26,22 +18,28 @@ import { Card, CardContent } from "@/components/ui/card";
 import ShoppingProductTile from "@/components/shopping-view/ShoppingProductTile";
 import ProductDetailsDialog from "@/components/shopping-view/ProductDetailsDialog";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import nike from "../../assets/nike.svg";
+import adidas from "../../assets/adidas.svg";
+import puma from "../../assets/puma.svg";
+import levis from "../../assets/levis.svg";
+import zara from "../../assets/zara.svg";
+import handm from "../../assets/handm.svg";
 
 const categoriesWithIcon = [
-  { id: "men", label: "Men", icon: ShirtIcon },
-  { id: "women", label: "Women", icon: CloudLightning },
+  { id: "men", label: "Men", icon: GiPoloShirt },
+  { id: "women", label: "Women", icon: GiLargeDress },
   { id: "kids", label: "Kids", icon: BabyIcon },
   { id: "accessories", label: "Accessories", icon: WatchIcon },
-  { id: "footwear", label: "Footwear", icon: UmbrellaIcon },
+  { id: "footwear", label: "Footwear", icon: GiConverseShoe },
 ];
 
 const brandsWithIcon = [
-  { id: "nike", label: "Nike", icon: Shirt },
-  { id: "adidas", label: "Adidas", icon: WashingMachine },
-  { id: "puma", label: "Puma", icon: ShoppingBasket },
-  { id: "levi", label: "Levi's", icon: Airplay },
-  { id: "zara", label: "Zara", icon: Images },
-  { id: "h&m", label: "H&M", icon: Heater },
+  { id: "nike", label: "Nike", icon: nike },
+  { id: "adidas", label: "Adidas", icon: adidas },
+  { id: "puma", label: "Puma", icon: puma },
+  { id: "levi", label: "Levi's", icon: levis },
+  { id: "zara", label: "Zara", icon: zara },
+  { id: "h&m", label: "H&M", icon: handm },
 ];
 
 const Home = () => {
@@ -185,8 +183,11 @@ const Home = () => {
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
                 <CardContent className="flex flex-col items-center justify-center p-6">
-                  <brandItem.icon className="w-12 h-12 mb-4 text-primary" />
-                  <span className="font-bold">{brandItem.label}</span>
+                  <img
+                    src={brandItem.icon}
+                    className="w-12 h-12 mb-4 text-primary"
+                  />
+                  <span className="font-bold mr-[3px]">{brandItem.label}</span>
                 </CardContent>
               </Card>
             ))}
@@ -203,14 +204,14 @@ const Home = () => {
             {productList && productList.length > 0
               ? productList.map((productItem, index) => {
                   // if (index < 4) {
-                    return (
-                      <ShoppingProductTile
-                        key={productItem.title}
-                        handleGetProductDetails={handleGetProductDetails}
-                        product={productItem}
-                        handleAddtoCart={handleAddtoCart}
-                      />
-                    );
+                  return (
+                    <ShoppingProductTile
+                      key={productItem.title}
+                      handleGetProductDetails={handleGetProductDetails}
+                      product={productItem}
+                      handleAddtoCart={handleAddtoCart}
+                    />
+                  );
                   // }
                 })
               : null}

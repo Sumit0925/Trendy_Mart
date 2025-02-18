@@ -59,17 +59,17 @@ const MenuItems = ({ closeMenuSheet }) => {
   };
 
   return (
-    <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
+    <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-3 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
         <Label
           onClick={() => {
             handleNavigate(menuItem);
             closeMenuSheet();
           }}
-          className="text-sm font-medium cursor-pointer"
+          className="nav-item text-base font-medium cursor-pointer pressed"
           key={menuItem.id}
         >
-          {menuItem.label}
+          <button className="">{menuItem.label}</button>
         </Label>
       ))}
     </nav>

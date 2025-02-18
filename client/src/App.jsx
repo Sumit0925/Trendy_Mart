@@ -21,7 +21,7 @@ import { checkAuth } from "./store/auth-slice";
 import { Skeleton } from "./components/ui/skeleton";
 import PaymentSuccess from "./pages/shopping-view/PaymentSuccess";
 import PaymentFailed from "./pages/shopping-view/PaymentFailed";
-import ShoppingHeader from "./components/shopping-view/ShoppingHeader";
+
 
 const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(

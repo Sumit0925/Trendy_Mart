@@ -89,7 +89,7 @@ const UserCartItemsContent = ({ cartItem }) => {
             className="h-8 w-8 rounded-full"
             size="icon"
             disabled={cartItem?.quantity === 1}
-            onClick={() => handleUpdateQuantity(cartItem, "minus")}
+            onClick={() => handleUpdateQuantity(cartItem, "minus",)}
           >
             <Minus className="w-4 h-4" />
             <span className="sr-only">Decrease</span>
