@@ -175,7 +175,7 @@ const updateCartItemQty = async (req, res) => {
         .json({ success: false, message: "Cart or product not found!" });
     }
 
-    // Transform cart items for response
+    //* Transform cart items for response
     const populateCartItems = cart.items.map((item) => ({
       productId: item.productId ? item.productId._id : null,
       image: item.productId ? item.productId.image : null,

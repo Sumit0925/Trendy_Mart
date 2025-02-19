@@ -21,7 +21,7 @@ import { checkAuth } from "./store/auth-slice";
 import { Skeleton } from "./components/ui/skeleton";
 import PaymentSuccess from "./pages/shopping-view/PaymentSuccess";
 import PaymentFailed from "./pages/shopping-view/PaymentFailed";
-
+import Search from "./pages/shopping-view/Search";
 
 const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -88,6 +88,7 @@ const App = () => {
             <Route path="listing" element={<Listing />} />
             <Route path="account" element={<Account />} />
             <Route path="checkout" element={<Checkout />} />
+            <Route path="search" element={<Search />} />
             <Route path="payment-failed" element={<PaymentFailed />} />
             <Route path="payment-success" element={<PaymentSuccess />} />
           </Route>

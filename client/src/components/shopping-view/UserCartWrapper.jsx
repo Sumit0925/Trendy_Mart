@@ -21,7 +21,7 @@ const UserCartWrapper = ({ cartItems, setOpenCartSheet, closeMenuSheet }) => {
       : 0;
 
   return (
-    <SheetContent className="max-sm:w-fit sm:max-w-md overflow-auto">
+    <SheetContent className="max-sm:w-[85vw] sm:max-w-md overflow-auto">
       <SheetHeader>
         <SheetTitle>Your Cart</SheetTitle>
       </SheetHeader>
