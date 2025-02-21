@@ -199,7 +199,7 @@ const Checkout = () => {
           <div className="mt-4 w-full">
             <Button onClick={handleInitiateRazorpayPayment} className="w-full">
               {isPaymentStart
-                ? "Processing Paypal Payment..."
+                ? "Processing RazorPay Payment..."
                 : "Checkout with RazorPay"}
             </Button>
           </div>

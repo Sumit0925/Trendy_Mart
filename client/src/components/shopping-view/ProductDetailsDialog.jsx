@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,8 +8,14 @@ import {
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { StarIcon } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setProductDetails } from "@/store/shop/products-slice";
+import StarRating from "../common/StarRating";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { addReview, getReviews } from "@/store/shop/review-slice";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 
 const ProductDetailsDialog = ({
   open,
@@ -17,12 +23,65 @@ const ProductDetailsDialog = ({
   productDetails,
   handleAddToCart,
 }) => {
+  const [reviewMsg, setReviewMsg] = useState("");
+  const [rating, setRating] = useState(0);
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
+  const { reviews } = useSelector((state) => state.shopReview);
+
+  const { toast } = useToast();
+
+  const handleRatingChange = (getRating) => {
+    // console.log(getRating, "getRating");
+
+    setRating(getRating);
+  };
 
   const handleDialogClose = () => {
     setOpen(false);
     dispatch(setProductDetails());
+    setRating(0);
+    setReviewMsg("");
   };
+
+  function handleAddReview() {
+    dispatch(
+      addReview({
+        productId: productDetails?._id,
+        userId: user?.id,
+        userName: user?.userName,
+        reviewMessage: reviewMsg,
+        reviewValue: rating,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        setRating(0);
+        setReviewMsg("");
+        dispatch(getReviews(productDetails?._id));
+        toast({
+          title: "Review added successfully!",
+        });
+      } else {
+        toast({
+          title: "You need to purchase product to review it.",
+          variant:"destructive"
+        });
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (productDetails !== null) dispatch(getReviews(productDetails?._id));
+  }, [productDetails]);
+
+  // console.log(reviews, "reviews");
+
+  const averageReview =
+    reviews && reviews.length > 0
+      ? reviews.reduce((sum, reviewItem) => sum + reviewItem.reviewValue, 0) /
+        reviews.length
+      : 0;
 
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
@@ -63,16 +122,15 @@ const ProductDetailsDialog = ({
           </div>
           <div className="flex items-center gap-2 mt-2">
             <div className="flex items-center gap-0.5">
-              {/* <StarRatingComponent rating={averageReview} /> */}
+              <StarRating rating={averageReview} />
+              {/* <StarIcon className="w-5 h-5 fill-primary" />
               <StarIcon className="w-5 h-5 fill-primary" />
               <StarIcon className="w-5 h-5 fill-primary" />
               <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
+              <StarIcon className="w-5 h-5 fill-primary" /> */}
             </div>
             <span className="text-muted-foreground">
-              {/* ({averageReview.toFixed(2)}) */}
-              (4.5)
+              ({averageReview.toFixed(2)}){/* (4.5) */}
             </span>
           </div>
           <div className="mt-5 mb-5">
@@ -95,12 +153,12 @@ const ProductDetailsDialog = ({
             )}
           </div>
           <Separator />
-          {/* <div className="max-h-[300px] overflow-auto">
+          <div className="max-h-[300px] overflow-auto" style={{scrollbarWidth:"thin"}}>
             <h2 className="text-xl font-bold mb-4">Reviews</h2>
             <div className="grid gap-6">
               {reviews && reviews.length > 0 ? (
-                reviews.map((reviewItem) => (
-                  <div className="flex gap-4">
+                reviews.map((reviewItem,index) => (
+                  <div key={index} className="flex gap-4">
                     <Avatar className="w-10 h-10 border">
                       <AvatarFallback>
                         {reviewItem?.userName[0].toUpperCase()}
@@ -108,10 +166,13 @@ const ProductDetailsDialog = ({
                     </Avatar>
                     <div className="grid gap-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-bold">{reviewItem?.userName}</h3>
+                        <h3 className="font-bold capitalize">{reviewItem?.userName}</h3>
+                        <span className="">
+
+                        <StarRating rating={reviewItem?.reviewValue} />
+                        </span>
                       </div>
                       <div className="flex items-center gap-0.5">
-                        <StarRatingComponent rating={reviewItem?.reviewValue} />
                       </div>
                       <p className="text-muted-foreground">
                         {reviewItem.reviewMessage}
@@ -126,7 +187,7 @@ const ProductDetailsDialog = ({
             <div className="mt-10 flex-col flex gap-2">
               <Label>Write a review</Label>
               <div className="flex gap-1">
-                <StarRatingComponent
+                <StarRating
                   rating={rating}
                   handleRatingChange={handleRatingChange}
                 />
@@ -144,7 +205,7 @@ const ProductDetailsDialog = ({
                 Submit
               </Button>
             </div>
-          </div> */}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
