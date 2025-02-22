@@ -30,22 +30,22 @@ const ProductImageUpload = ({
     if (selectedFile) setImageFile(selectedFile);
   }
 
-  function handleDragOver(event) {
+  const handleDragOver = (event) => {
     event.preventDefault();
-  }
+  };
 
-  function handleDrop(event) {
+  const handleDrop = (event) => {
     event.preventDefault();
     const droppedFile = event.dataTransfer.files?.[0];
     if (droppedFile) setImageFile(droppedFile);
-  }
+  };
 
-  function handleRemoveImage() {
+  const handleRemoveImage = () => {
     setImageFile(null);
     if (inputRef.current) {
       inputRef.current.value = "";
     }
-  }
+  };
 
   const uploadImageToCloudinary = async () => {
     setImageLoadingState(true);

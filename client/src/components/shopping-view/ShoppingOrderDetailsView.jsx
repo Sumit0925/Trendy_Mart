@@ -81,11 +81,13 @@ const ShoppingOrderDetailsView = ({ orderDetails }) => {
           <div className="grid gap-2">
             <div className="font-medium">Shipping Info</div>
             <div className="grid gap-0.5 text-muted-foreground">
-              <span>{user.userName}</span>
-              <span>{orderDetails?.addressInfo?.address}</span>
-              <span>{orderDetails?.addressInfo?.city}</span>
-              <span>{orderDetails?.addressInfo?.pincode}</span>
-              <span>{orderDetails?.addressInfo?.phone}</span>
+              <span className="capitalize">{user.userName}</span>
+              <div className="flex flex-row gap-2">
+                <span>{orderDetails?.addressInfo?.address},</span>
+                <span>{orderDetails?.addressInfo?.city},</span>
+                <span>{orderDetails?.addressInfo?.pincode}</span>
+              </div>
+              <span>Ph: {orderDetails?.addressInfo?.phone}</span>
               <span>Note : {orderDetails?.addressInfo?.notes}</span>
             </div>
           </div>

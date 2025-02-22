@@ -115,11 +115,13 @@ const AdminOrderDetailsView = ({ orderDetails, setOpenDetailsDialog }) => {
           <div className="grid gap-2">
             <div className="font-medium">Shipping Info</div>
             <div className="grid gap-0.5 text-muted-foreground">
-              <span>{orderDetails?.userName}</span>
-              <span>{orderDetails?.addressInfo?.address}</span>
-              <span>{orderDetails?.addressInfo?.city}</span>
-              <span>{orderDetails?.addressInfo?.pincode}</span>
-              <span>{orderDetails?.addressInfo?.phone}</span>
+              <span className="capitalize">{orderDetails?.userName}</span>
+              <div className="flex flex-row gap-2">
+                <span>{orderDetails?.addressInfo?.address},</span>
+                <span>{orderDetails?.addressInfo?.city},</span>
+                <span>{orderDetails?.addressInfo?.pincode}</span>
+              </div>
+              <span>Ph: {orderDetails?.addressInfo?.phone}</span>
               <span>Note : {orderDetails?.addressInfo?.notes}</span>
             </div>
           </div>
