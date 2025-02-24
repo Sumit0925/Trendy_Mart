@@ -31,6 +31,7 @@ import { useToast } from "@/hooks/use-toast";
 import TrendyMart from "../../assets/TrendyMart.png";
 import UserCartWrapper from "./userCartWrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
+import { cn } from "@/lib/utils";
 
 const MenuItems = ({ closeMenuSheet }) => {
   const navigate = useNavigate();
@@ -89,6 +90,7 @@ const HeaderRightContent = ({ closeMenuSheet, setOpenSheet }) => {
     dispatch(logoutUser()).then((data) => {
       if (data?.payload?.success) {
         toast({
+          className: cn("border-green-500 bg-green-500 text-neutral-50"),
           title: data?.payload?.message,
         });
       }

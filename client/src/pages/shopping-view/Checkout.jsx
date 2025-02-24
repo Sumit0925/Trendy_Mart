@@ -9,6 +9,7 @@ import FormatPrice from "@/helpers/FormatPrice";
 import { useNavigate } from "react-router-dom";
 import { capturePayment, createNewOrder } from "@/store/shop/order-slice";
 import { fetchCartItems } from "@/store/shop/cart-slice";
+import { cn } from "@/lib/utils";
 
 const Checkout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -125,7 +126,10 @@ const Checkout = () => {
             );
 
             if (verifyRes?.payload?.success) {
-              toast({ title: "Payment Successful!", variant: "success" });
+              toast({
+                className: cn("border-green-500 bg-green-500 text-neutral-50"),
+                title: "Payment Successful!",
+              });
               dispatch(fetchCartItems(user?.id));
               navigate("/shop/payment-success"); // Redirect to success page
             } else {

@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
 import { logoutUser } from "@/store/auth-slice";
+import { cn } from "@/lib/utils";
 
 const AdminHeader = ({ setOpen }) => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const AdminHeader = ({ setOpen }) => {
       // console.log("first", data);
       if (data?.payload?.success) {
         toast({
+          className: cn("border-green-500 bg-green-500 text-neutral-50"),
           title: data?.payload?.message,
         });
       }

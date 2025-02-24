@@ -1,6 +1,7 @@
 import Form from "@/components/common/Form";
 import { loginFormControls } from "@/config";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import { loginUser } from "@/store/auth-slice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -12,7 +13,7 @@ const Login = () => {
     email: "",
     password: "",
   });
-  
+
   const dispatch = useDispatch();
   const { toast } = useToast();
 
@@ -23,6 +24,7 @@ const Login = () => {
       if (data?.payload?.success) {
         // console.log(data);
         toast({
+          className: cn("border-green-500 bg-green-500 text-neutral-50"),
           title: data?.payload?.message,
         });
       } else {
@@ -32,7 +34,6 @@ const Login = () => {
         });
       }
     });
-
   };
 
   return (
