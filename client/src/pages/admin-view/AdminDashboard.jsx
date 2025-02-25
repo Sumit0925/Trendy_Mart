@@ -1,6 +1,12 @@
 import ProductImageUpload from "@/components/admin-view/ProductImageUpload";
 import { Button } from "@/components/ui/button";
-import { addFeatureImage, getFeatureImages } from "@/store/common-slice";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import {
+  addFeatureImage,
+  deleteFeatureImage,
+  getFeatureImages,
+} from "@/store/common-slice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -9,6 +15,7 @@ const AdminDashboard = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [imageLoadingState, setImageLoadingState] = useState(false);
   const dispatch = useDispatch();
+  const { toast } = useToast();
   const { featureImageList } = useSelector((state) => state.commonFeature);
 
   console.log(uploadedImageUrl, "uploadedImageUrl");
@@ -19,6 +26,18 @@ const AdminDashboard = () => {
         dispatch(getFeatureImages());
         setImageFile(null);
         setUploadedImageUrl("");
+      }
+    });
+  };
+
+  const handleDeleteFeatureImage = (id) => {
+    dispatch(deleteFeatureImage(id)).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(getFeatureImages());
+        toast({
+          className: cn("border-green-500 bg-green-500 text-neutral-50"),
+          title: data?.payload?.message,
+        });
       }
     });
   };
@@ -41,17 +60,27 @@ const AdminDashboard = () => {
         isCustomStyling={true}
         // isEditMode={currentEditedId !== null}
       />
-      <Button onClick={handleUploadFeatureImage} className="mt-5 w-full">
+      <Button
+        onClick={handleUploadFeatureImage}
+        className="mt-5 w-full"
+        disabled={imageFile === null}
+      >
         Upload
       </Button>
       <div className="flex flex-col gap-4 mt-5">
         {featureImageList && featureImageList.length > 0
           ? featureImageList.map((featureImgItem) => (
-              <div className="relative">
+              <div key={featureImgItem._id} className="relative">
                 <img
                   src={featureImgItem.image}
-                  className="w-full h-[300px] object-cover rounded-t-lg"
+                  className="w-full h-[300px] object-cover rounded-lg sm:object-center object-right"
                 />
+                <Button
+                  onClick={() => handleDeleteFeatureImage(featureImgItem._id)}
+                  className="absolute top-5 right-5"
+                >
+                  Delete
+                </Button>
               </div>
             ))
           : null}

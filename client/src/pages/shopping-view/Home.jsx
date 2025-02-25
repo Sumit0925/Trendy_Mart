@@ -24,6 +24,7 @@ import puma from "../../assets/puma.svg";
 import levis from "../../assets/levis.svg";
 import zara from "../../assets/zara.svg";
 import handm from "../../assets/handm.svg";
+import { getFeatureImages } from "@/store/common-slice";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: GiPoloShirt },
@@ -50,6 +51,7 @@ const Home = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
+  const { featureImageList } = useSelector((state) => state.commonFeature);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -90,13 +92,17 @@ const Home = () => {
     if (productDetails !== null) setOpenDetailsDialog(true);
   }, [productDetails]);
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length);
-  //   }, 15000);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length);
+    }, 15000);
 
-  //   return () => clearInterval(timer);
-  // }, [featureImageList]);
+    return () => clearInterval(timer);
+  }, [featureImageList]);
+
+  useEffect(() => {
+    dispatch(getFeatureImages());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -106,21 +112,22 @@ const Home = () => {
       })
     );
   }, [dispatch]);
+  console.log(featureImageList);
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="relative w-full h-[600px] overflow-hidden">
-        {/* {featureImageList && featureImageList.length > 0
+      <div className="relative w-full h-[300px] sm:h-[600px] overflow-hidden">
+        {featureImageList && featureImageList.length > 0
           ? featureImageList.map((slide, index) => (
               <img
                 src={slide?.image}
                 key={index}
                 className={`${
                   index === currentSlide ? "opacity-100" : "opacity-0"
-                } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
+                } absolute top-0 left-0 w-full h-full object-cover object-right transition-opacity duration-1000`}
               />
             ))
-          : null} */}
+          : null}
         <Button
           variant="outline"
           size="icon"
